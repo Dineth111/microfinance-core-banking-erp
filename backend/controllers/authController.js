@@ -3,7 +3,7 @@ import User from '../models/User.js';
 
 // Generate JWT Token
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET || 'microfinance_jwt_secret_key_2026_super_secure', {
+  return jwt.sign({ id: id?.toString ? id.toString() : id }, process.env.JWT_SECRET || 'microfinance_jwt_secret_key_2026_super_secure', {
     expiresIn: '30d',
   });
 };
@@ -14,7 +14,7 @@ const generateToken = (id) => {
 export const loginUser = async (req, res) => {
   try {
     const { email, phone, identifier, password, role, loginType } = req.body;
-    const userEmailOrPhone = email || phone || identifier;
+    const userEmailOrPhone = (email || phone || identifier) ? String(email || phone || identifier).trim() : '';
 
     const demoAccounts = {
       'admin@microfinance.com': { name: 'System Administrator', role: 'Admin', phone: '+1 (555) 019-2831', address: 'HQ Financial District' },

@@ -29,8 +29,6 @@ const holidaySchema = new mongoose.Schema(
   }
 );
 
-// Index to efficiently query holidays by date range
-holidaySchema.index({ date: 1 });
 
 const Holiday = mongoose.model('Holiday', holidaySchema);
 export default Holiday;

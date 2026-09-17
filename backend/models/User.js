@@ -64,14 +64,16 @@ const userSchema = new mongoose.Schema(
 // Encrypt password before saving user
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
-    next();
+    return next ? next() : undefined;
   }
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
+  if (next) next();
 });
 
 // Compare password method
 userSchema.methods.matchPassword = async function (enteredPassword) {
+  if (!this.password || !enteredPassword) return false;
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
